@@ -7,7 +7,7 @@ const cookies = new Cookies();
 
 const Login = () => {
     const responseFacebook = (response) => {
-        axios.post('http://localhost:5000/user/register/', {
+        axios.post('https://taktik-quiz-api.herokuapp.com/user/register/', {
             name: response.name,
             email: response.email,
             facebookId: response.id,

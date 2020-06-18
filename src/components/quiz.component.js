@@ -37,7 +37,7 @@ const Quiz = () => {
     const userId = cookies.get('user_id');
 
     const setAnswer = (quizId, answer) => {
-        axios.post('http://localhost:5000/user/answer/', {
+        axios.post('https://taktik-quiz-api.herokuapp.com/user/answer/', {
                 userId: userId,
                 quizId,
                 answer
@@ -48,7 +48,7 @@ const Quiz = () => {
     }
 
     const repeatTest = () => {
-        axios.delete(`http://localhost:5000/user/reset/${userId}/`)
+        axios.delete(`https://taktik-quiz-api.herokuapp.com/user/reset/${userId}/`)
             .then(res => {
                 setAnswers(res.data);
             });
@@ -56,12 +56,12 @@ const Quiz = () => {
 
     useEffect(() => {
         // get quizzes
-        axios.get('http://localhost:5000/quiz/')
+        axios.get('https://taktik-quiz-api.herokuapp.com/quiz/')
             .then(res => {
                 setQuizzes(res.data);
             });
         // get users answers
-        axios.get(`http://localhost:5000/user/answers/${userId}/`)
+        axios.get(`https://taktik-quiz-api.herokuapp.com/user/answers/${userId}/`)
             .then(res => {
                 setAnswers(res.data);
             });
@@ -105,11 +105,11 @@ const Quiz = () => {
             </Grid>}
             {!activeQuiz && <Grid container direction="column" justify="center" alignItems="center">
                 <h2>Tvoje uspesnost</h2>
-                <Progress>
-                    <LinearProgress variant="determinate" value={50} />
-                    <ProgressLabel>50%</ProgressLabel>
-                </Progress>
-                <Grid container justify="center" alignItems="center">
+                <Grid container direction="column" justify="center" alignItems="center">
+                    <Progress>
+                        <LinearProgress variant="determinate" value={50} />
+                        <ProgressLabel>50%</ProgressLabel>
+                    </Progress>
                     <Grid item col={6}>
                         <TableContainer component={Paper}>
                             <Table>
@@ -117,7 +117,8 @@ const Quiz = () => {
                                     <TableRow>
                                         <TableCell>Otazka</TableCell>
                                         <TableCell>Vase odpoved</TableCell>
-                                        <TableCell align="right">Vysledek</TableCell>
+                                        <TableCell>Spravna odpoved</TableCell>
+                                        <TableCell align="right"></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -128,6 +129,7 @@ const Quiz = () => {
                                             <TableRow key={quiz._id}>
                                                 <TableCell>{quiz.question}</TableCell>
                                                 <TableCell>{quiz.answers[answer.answer]}</TableCell>
+                                                <TableCell>{quiz.answers[quiz.correctAnswer]}</TableCell>
                                                 <TableCell align="right">{quiz.correctAnswer === answer.answer ? <CheckIcon color="primary" /> : <ClearIcon color="secondary" />}</TableCell>
                                             </TableRow>
                                         )

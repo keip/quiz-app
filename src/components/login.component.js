@@ -2,6 +2,7 @@ import React from 'react';
 import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import { Grid } from '@material-ui/core';
 
 const cookies = new Cookies();
 
@@ -24,14 +25,13 @@ const Login = () => {
     }
 
     return (
-        <div className="App">
-            <h1>LOGIN WITH FACEBOOK</h1>
+        <Grid container justify="center" alignItems="center">
             <FacebookLogin
                 appId="679656046214827"
                 fields="name,email"
                 callback={responseFacebook}
             />
-        </div>
+        </Grid>
     );
 }
 

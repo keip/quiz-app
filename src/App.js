@@ -1,22 +1,28 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Login from './components/login.component';
+import Quiz from './components/quiz.component';
 import './App.css';
 
-import FacebookLogin from 'react-facebook-login';
+import Cookies from 'universal-cookie';
 
 const App = () => {
-  const responseFacebook = (response) => {
-    console.log(response);
+  const cookies = new Cookies();
+  const access_token = cookies.get('access_token');
+
+  if (access_token) {
+    return (
+      <Router>
+        
+      </Router>
+    );
   }
 
   return (
-    <div className="App">
-      <h1>LOGIN WITH FACEBOOK AND GOOGLE</h1>
-      <FacebookLogin
-        appId="679656046214827"
-        fields="name,email,picture"
-        callback={responseFacebook}
-      />
-    </div>
+    <Router>
+      <Route path="/" exact component={Quiz} />
+      <Route path="/login" exact component={Login} />
+    </Router>
   );
 }
 

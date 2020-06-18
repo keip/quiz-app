@@ -20,9 +20,9 @@ mongoose.connection.once('open', () => {
 
 // router
 const quizRouter = require('./routes/quiz');
-const voteRouter = require('./routes/vote');
+const userRouter = require('./routes/user');
 app.use('/quiz', quizRouter);
-app.use('/vote', voteRouter);
+app.use('/user', userRouter);
 
 // app listen
 app.listen(port, () => {

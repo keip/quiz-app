@@ -8,8 +8,15 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
-    const questions = req.body.questions;
-    const newQuiz = new Quiz({ questions });
+    const question = req.body.question;
+    const answers = req.body.answers;
+    const correctAnswer = req.body.correctAnswer;
+
+    const newQuiz = new Quiz({
+        question,
+        answers,
+        correctAnswer
+    });
 
     newQuiz.save()
         .then(() => res.json('Quiz added!'))

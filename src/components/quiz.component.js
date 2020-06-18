@@ -34,6 +34,7 @@ const Quiz = () => {
     const cookies = new Cookies();
     const [quizzes, setQuizzes] = useState([]);
     const [answers, setAnswers] = useState([]);
+    const [answerMatrix, setAnswerMatrix] = useState([0, 1, 2, 3]);
     const userId = cookies.get('user_id');
 
     const setAnswer = (quizId, answer) => {
@@ -43,6 +44,7 @@ const Quiz = () => {
                 answer
             })
             .then(res => {
+                setAnswerMatrix(shuffle(answerMatrix));
                 setAnswers(res.data);
             });
     }
@@ -54,7 +56,41 @@ const Quiz = () => {
             });
     }
 
+    const shuffle = array => {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+      
+        while (0 !== currentIndex) {
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+      
+        return array;
+      }
+
+    const activeQuiz = quizzes.find(quiz => {
+        const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
+        return !hasAnswer;
+    });
+    const activeStep = quizzes.findIndex(quiz => {
+        const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
+        return !hasAnswer;
+    });
+    const correctAnswers = quizzes.filter(quiz => {
+        const answer = answers.find(answer => answer.quizId === quiz._id);
+        if (answer && answer.answer === quiz.correctAnswer) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    const percentage = correctAnswers.length / quizzes.length * 100;
+    
     useEffect(() => {
+        // shuffle answers
+        setAnswerMatrix(shuffle(answerMatrix));
         // get quizzes
         axios.get('https://taktik-quiz-api.herokuapp.com/quiz/')
             .then(res => {
@@ -65,16 +101,7 @@ const Quiz = () => {
             .then(res => {
                 setAnswers(res.data);
             });
-    }, [userId]);
-
-    const activeQuiz = quizzes.find(quiz => {
-        const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
-        return !hasAnswer;
-    });
-    const activeStep = quizzes.findIndex(quiz => {
-        const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
-        return !hasAnswer;
-    });
+    }, [answerMatrix, userId]);
 
     return (
         <div className="App">
@@ -85,18 +112,18 @@ const Quiz = () => {
                     </Step>
                 ))}
                 <Step key={`quiz-finish}`}>
-                    <StepLabel>Results</StepLabel>
+                    <StepLabel>Vysledky</StepLabel>
                 </Step>
             </Stepper>
             <div>
             {activeQuiz && <Grid container direction="column" justify="center" alignItems="center">
                 <h2>{activeQuiz.question}</h2>
                 <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
-                    {activeQuiz.answers.map((answer, index) => {
+                    {answerMatrix.map(index => {
                         return (
                             <Grid item key={`${activeQuiz._id}-answer-${index}`}>
                                 <Button variant="contained" onClick={() => setAnswer(activeQuiz._id, index)}>
-                                    {answer}
+                                    {activeQuiz.answers[index]}
                                 </Button>
                             </Grid>
                         );
@@ -107,8 +134,8 @@ const Quiz = () => {
                 <h2>Tvoje uspesnost</h2>
                 <Grid container direction="column" justify="center" alignItems="center">
                     <Progress>
-                        <LinearProgress variant="determinate" value={50} />
-                        <ProgressLabel>50%</ProgressLabel>
+                        <LinearProgress variant="determinate" value={percentage} />
+                        <ProgressLabel>{percentage}%</ProgressLabel>
                     </Progress>
                     <Grid item col={6}>
                         <TableContainer component={Paper}>
@@ -124,7 +151,6 @@ const Quiz = () => {
                                 <TableBody>
                                     {quizzes.map((quiz) => {
                                         const answer = answers.find(answer => answer.quizId === quiz._id);
-                                        console.log(quiz.answers, answer.answer)
                                         return (
                                             <TableRow key={quiz._id}>
                                                 <TableCell>{quiz.question}</TableCell>

@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import Login from './components/login.component';
 import Quiz from './components/quiz.component';
 import { Container } from '@material-ui/core';
-import './App.css';
 
 import Cookies from 'universal-cookie';
 

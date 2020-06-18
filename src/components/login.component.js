@@ -3,10 +3,12 @@ import FacebookLogin from 'react-facebook-login';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import { Grid } from '@material-ui/core';
+import { useHistory } from "react-router-dom";
 
 const cookies = new Cookies();
 
 const Login = () => {
+    const history = useHistory();
     const responseFacebook = (response) => {
         if (response.accessToken) {
             axios.post('https://taktik-quiz-api.herokuapp.com/user/register/', {
@@ -16,7 +18,7 @@ const Login = () => {
                 accessToken: response.accessToken
             }).then(res => {
                 cookies.set('user_id', res.data.userId);
-                window.location = '/';
+                history.push('/');
             });
             cookies.set('access_token', response.accessToken);
         } else {

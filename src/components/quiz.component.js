@@ -1,7 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Button, Stepper, Step, StepLabel } from '@material-ui/core';
+import { 
+    Grid, 
+    Button, 
+    Stepper, 
+    Step, 
+    StepLabel, 
+    LinearProgress,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper
+} from '@material-ui/core';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
+import styled from 'styled-components'
 import axios from 'axios';
 import Cookies from 'universal-cookie';
+
+const Progress = styled.div`
+    width: 50%;
+`;
+
+const ProgressLabel = styled.div`
+    font-size: 22px;
+    text-align: center;
+    padding: 10px 0 30px;
+`;
 
 const Quiz = () => {
     const cookies = new Cookies();
@@ -44,7 +71,7 @@ const Quiz = () => {
         const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
         return !hasAnswer;
     });
-    const activeStep = quizzes.findIndex((quiz, index) => {
+    const activeStep = quizzes.findIndex(quiz => {
         const hasAnswer = answers.find(answer => answer.quizId === quiz._id);
         return !hasAnswer;
     });
@@ -54,7 +81,7 @@ const Quiz = () => {
             <Stepper activeStep={activeStep !== -1 ? activeStep : quizzes.length} alternativeLabel>
                 {quizzes.map((quiz, key) => (
                     <Step key={`quiz-${quiz._id}`}>
-                        <StepLabel>Question {key + 1}</StepLabel>
+                        <StepLabel>Otazka {key + 1}</StepLabel>
                     </Step>
                 ))}
                 <Step key={`quiz-finish}`}>
@@ -77,7 +104,41 @@ const Quiz = () => {
                 </Grid>
             </Grid>}
             {!activeQuiz && <Grid container direction="column" justify="center" alignItems="center">
-                <h2>Tvoje uspesnost:</h2>
+                <h2>Tvoje uspesnost</h2>
+                <Progress>
+                    <LinearProgress variant="determinate" value={50} />
+                    <ProgressLabel>50%</ProgressLabel>
+                </Progress>
+                <Grid container justify="center" alignItems="center">
+                    <Grid item col={6}>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Otazka</TableCell>
+                                        <TableCell>Vase odpoved</TableCell>
+                                        <TableCell align="right">Vysledek</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {quizzes.map((quiz) => {
+                                        const answer = answers.find(answer => answer.quizId === quiz._id);
+                                        console.log(quiz.answers, answer.answer)
+                                        return (
+                                            <TableRow key={quiz._id}>
+                                                <TableCell>{quiz.question}</TableCell>
+                                                <TableCell>{quiz.answers[answer.answer]}</TableCell>
+                                                <TableCell align="right">{quiz.correctAnswer === answer.answer ? <CheckIcon color="primary" /> : <ClearIcon color="secondary" />}</TableCell>
+                                            </TableRow>
+                                        )
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                </Grid>
+                <br />
+                <br />
                 <Button variant="contained" onClick={() => repeatTest()}>Zopakovat test</Button>
             </Grid>}
             </div>

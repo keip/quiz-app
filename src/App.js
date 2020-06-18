@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Login from './components/login.component';
 import Quiz from './components/quiz.component';
@@ -19,7 +19,7 @@ const App = () => {
 
   return (
     <Container fixed>
-      <h1 align="center">Quizapp</h1>
+      <h1 align="center">QuizApp</h1>
       <Router>
         <Route path="/" exact component={Quiz} />
         <Route path="/login" exact component={Login} />

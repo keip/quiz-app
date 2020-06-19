@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Login from './components/login.component';
-import Quiz from './components/quiz.component';
+import Quiz from './components/quiz/quiz.component';
 import { Container } from '@material-ui/core';
 
 import Cookies from 'universal-cookie';

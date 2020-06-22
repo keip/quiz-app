@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+import ReplayIcon from '@material-ui/icons/Replay';
 import styled from 'styled-components';
 
 const Progress = styled.div`
@@ -58,7 +59,13 @@ const QuizResults = (props) => {
                                             <TableCell>{quiz.question}</TableCell>
                                             <TableCell>{quiz.answers[answer.answer]}</TableCell>
                                             <TableCell>{quiz.answers[quiz.correctAnswer]}</TableCell>
-                                            <TableCell align="right">{quiz.correctAnswer === answer.answer ? <CheckIcon color="primary" /> : <ClearIcon color="secondary" />}</TableCell>
+                                            <TableCell align="right">
+                                                {
+                                                    quiz.correctAnswer === answer.answer 
+                                                    ? <CheckIcon color="primary" />
+                                                    : <ClearIcon color="secondary" />
+                                                }
+                                            </TableCell>
                                         </TableRow>
                                     )
                                 })}
@@ -69,7 +76,14 @@ const QuizResults = (props) => {
             </Grid>
             <br />
             <br />
-            <Button variant="contained" onClick={() => repeatTest()}>Zopakovat test</Button>
+            <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => repeatTest()}
+                startIcon={<ReplayIcon />}
+            >
+                Zopakovat test
+            </Button>
         </Grid>
     );
 }

@@ -30,6 +30,7 @@ const Quiz = () => {
     const percentage = correctAnswers.length / quizzes.length * 100;
 
     const setAnswer = answer => {
+        if (userAnswer !== -1) return;
         setUserAnswer(answer);
     }
 
@@ -87,7 +88,6 @@ const Quiz = () => {
     return (
         <div className="App">
             <QuizSteps activeStep={activeStep} quizzes={quizzes} />
-            <div>
             {activeQuiz && 
                 <ActiveQuiz 
                     activeQuiz={activeQuiz}
@@ -95,6 +95,7 @@ const Quiz = () => {
                     setAnswer={setAnswer} 
                     userAnswer={userAnswer}
                     nextQuiz={nextQuiz}
+                    isLastStep={activeStep === quizzes.length - 1}
                 />}
             {!activeQuiz && 
                 <QuizResults 
@@ -103,7 +104,6 @@ const Quiz = () => {
                     answers={answers} 
                     repeatTest={repeatTest}
                 />}
-            </div>
         </div>
     );
 }

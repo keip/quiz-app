@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const https = require('https');
+const fs = require('fs');
 const mongoose = require('mongoose');
 
 // use dotenv config
@@ -24,7 +26,12 @@ const userRouter = require('./routes/user');
 app.use('/quiz', quizRouter);
 app.use('/user', userRouter);
 
-// app listen
-app.listen(port, () => {
-    console.log(`Server is connected on port ${port}`);
-});
+const httpsOptions = {
+    key: fs.readFileSync('./security/cert.key'),
+    cert: fs.readFileSync('./security/cert.pem')
+};
+
+https.createServer(httpsOptions, app)
+    .listen(port, () => {
+        console.log('server running at ' + port)
+    });

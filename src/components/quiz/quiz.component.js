@@ -37,7 +37,7 @@ const Quiz = () => {
     const nextQuiz = () => {
         if (userAnswer === -1) return;
 
-        axios.post('https://taktik-quiz-api.herokuapp.com/user/answer/', {
+        axios.post(`${process.env.API_URI}user/answer/`, {
                 userId: userId,
                 quizId: activeQuiz._id,
                 answer: userAnswer
@@ -50,7 +50,7 @@ const Quiz = () => {
     }
 
     const repeatTest = () => {
-        axios.delete(`https://taktik-quiz-api.herokuapp.com/user/reset/${userId}/`)
+        axios.delete(`${process.env.API_URI}user/reset/${userId}/`)
             .then(res => {
                 setAnswers(res.data);
             });
@@ -74,12 +74,12 @@ const Quiz = () => {
         // shuffle answers
         setAnswerMatrix(shuffle(answerMatrix));
         // get quizzes
-        axios.get('https://taktik-quiz-api.herokuapp.com/quiz/')
+        axios.get(`${process.env.API_URI}quiz/`)
             .then(res => {
                 setQuizzes(res.data);
             });
         // get users answers
-        axios.get(`https://taktik-quiz-api.herokuapp.com/user/answers/${userId}/`)
+        axios.get(`${process.env.API_URI}user/answers/${userId}/`)
             .then(res => {
                 setAnswers(res.data);
             });

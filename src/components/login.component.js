@@ -11,7 +11,7 @@ const Login = () => {
     const history = useHistory();
     const responseFacebook = (response) => {
         if (response.accessToken) {
-            axios.post('https://taktik-quiz-api.herokuapp.com/user/register/', {
+            axios.post(`${process.env.API_URI}user/register/`, {
                 name: response.name,
                 email: response.email,
                 facebookId: response.id,
